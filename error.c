@@ -15,11 +15,15 @@
 void	print_with_buff(int error, t_data *data)
 {
 	if (error == -5)
-		ft_printf("There is an error in your link!\nCheck it, please");
+		ft_printf("There is an error in your links!\nCheck them, please");
 	else if (error == -6)
-		ft_printf("There is an error in your room!\nCheck it, please");
+		ft_printf("There is an error in your rooms!\nCheck them, please");
 	else if (error == -8)
-		ft_printf("Unknown data: ");
+		ft_printf("Unknown data");
+	else if (error == -11)
+		ft_printf("Wrong room declaration!\nMove it to your rooms block");
+	else if (error == -12)
+		ft_printf("Room duplicate");
 	ft_printf(": %s", data->buffer);
 }
 

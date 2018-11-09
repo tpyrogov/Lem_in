@@ -18,21 +18,21 @@ int		parse_room(t_data *data)
 	int		error;
 	t_coord	coord;
 
+	error = -1;
 	if (data->ants > 0)
 	{
+		if (data->rooms_inited == 1)
+			return (-11);
 		pars = ft_strsplit(data->buffer, ' ');
 		if (check_size(pars) != 3 || (pars[0] != NULL && pars[0][0] == 'L'))
 		{
 			free_mass(pars);
 			return (-6);
 		}
-		if (find_room(data, pars[0]) == NULL && only_digits(pars[1]) == 1
-		&& only_digits(pars[2]) == 1)
-		{
-			coord.x = ft_atoi(pars[1]);
-			coord.y = ft_atoi(pars[2]);
-			error = add_room(data, pars[0], coord);
-		}
+		if (only_digits(pars[1]) == 1 && only_digits(pars[2]) == 1)
+			error = init_new_room(data, pars, &coord);
+		else if (find_room(data, pars[0]) != NULL)
+			error = -12;
 		else
 			error = -6;
 		free_mass(pars);
@@ -47,6 +47,7 @@ int		create_links(t_data *data)
 	t_room	*cur2;
 	char	**pars;
 
+	data->rooms_inited = 1;
 	if (data->links_malloced == 0)
 	{
 		if (init_links(data) < 0)
@@ -59,8 +60,7 @@ int		create_links(t_data *data)
 	if (check_size(pars) > 3 || !(cur1 = find_room(data, pars[0]))
 	|| !(cur2 = find_room(data, pars[1])))
 	{
-		if (pars != NULL)
-			free_mass(pars);
+		free_mass(pars);
 		return (-5);
 	}
 	mark_links(data, cur1, cur2);
@@ -84,8 +84,7 @@ int		read_ant_num(t_data *data)
 	|| data->ants < 0 || data->ants > 2147483647
 	|| ft_strchr(data->buffer, '-'))
 	{
-		if (split != NULL)
-			free_mass(split);
+		free_mass(split);
 		return (-1);
 	}
 	free_mass(split);

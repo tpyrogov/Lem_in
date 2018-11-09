@@ -21,11 +21,12 @@ SRC			=   ./main.c \
                 ./algo.c \
                 ./queue.c \
                 ./ants_moves.c \
-                ./ants_moves_2.c
+                ./ants_moves_2.c \
+                ./find_room.c
 INCL		=	./lem_in.h
 INCL_LIB	=	./libft/includes/libft.h
 OBJ			=	$(SRC:.c=.o)
-NAME		=	lem_in
+NAME		=	lem-in
 
 all: $(NAME)
 

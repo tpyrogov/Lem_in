@@ -32,6 +32,7 @@ void	init_data(t_data *help)
 	help->in_start_room = 0;
 	help->new_ant_id = 1;
 	help->fin_i = 0;
+	help->rooms_inited = 0;
 }
 
 int		init_links(t_data *data)

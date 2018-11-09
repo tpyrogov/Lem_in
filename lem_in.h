@@ -65,6 +65,8 @@ typedef struct		s_data
 	int				cur_comment;
 	int				links_malloced;
 	int				init_success;
+	int				rooms_inited;
+	int				print_routes;
 	int				depth;
 }					t_data;
 
@@ -76,11 +78,14 @@ t_route				*init_route(int **way, int depth);
 int					add_route(t_data *data, int **s, int depth);
 int					*new_int_array(size_t size);
 
+int					init_new_room(t_data *data, char **pars, t_coord *coord);
+
 int					check_size(char **s);
 int					add_room(t_data *data, char *name, t_coord coord);
 t_room				*find_room(t_data *data, char *name);
 t_room				*find_by_type(t_data *data, int type);
 t_room				*find_by_index(t_data *data, int index);
+t_room				*find_duplicate(t_data *data, char *s, t_coord coord);
 
 void				put_errors(int error, t_data *data);
 
@@ -105,6 +110,7 @@ int					find_in_finish(t_data *data, int ant_name);
 
 void				let_ants_out(t_data *data);
 void				print_map(t_data *data);
+void				print_routes(t_data *data);
 
 void				free_mass(char **mass);
 void				free_route(t_data *data);

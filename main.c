@@ -61,15 +61,28 @@ int		*new_int_array(size_t size)
 	return (new);
 }
 
-void	flag(t_data *data, char **argv)
+void	flag(t_data *data, char **argv, int flags)
 {
-	if (ft_strcmp(argv[1], "--error") == 0
-		|| ft_strcmp(argv[1], "-e") == 0)
-		data->error_flag = 1;
-	else
+	int i;
+
+	i = 1;
+	while (i < flags)
 	{
-		ft_printf("usage: ./lem_in [ -e | --error ]\n");
-		exit(0);
+		if (ft_strcmp(argv[i], "-e") == 0 && data->error_flag == 0)
+			data->error_flag = 1;
+		else if (ft_strcmp(argv[i], "--error") == 0 && data->error_flag == 0)
+			data->error_flag = 1;
+		else if (ft_strcmp(argv[i], "-r") == 0 && data->print_routes == 0)
+			data->print_routes = 1;
+		else if (ft_strcmp(argv[i], "--routes") == 0 && data->print_routes == 0)
+			data->print_routes = 1;
+		else
+		{
+			ft_printf("Usage:\n");
+			ft_printf("./lem_in ( -e | --error ) ( -r | --routes )\n");
+			exit(0);
+		}
+		i++;
 	}
 }
 
@@ -80,19 +93,23 @@ int		main(int argc, char **argv)
 
 	init_data(&help);
 	if (argc > 1)
-		flag(&help, argv);
+		flag(&help, argv, argc);
 	if ((error = init(&help)) < 0
 		|| help.init_success != 1
 		|| (error = solve(&help)) < 0)
 	{
 		put_errors(error, &help);
 		free_data(&help);
-		system("leaks lem_in");
 		exit(0);
 	}
 	print_map(&help);
 	free_map(&help);
 	ft_printf("\n");
+	if (help.print_routes == 1)
+	{
+		print_routes(&help);
+		ft_printf("\n");
+	}
 	let_ants_out(&help);
 	free_data(&help);
 	exit(0);

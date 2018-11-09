@@ -44,44 +44,35 @@ int		add_room(t_data *data, char *name, t_coord coord)
 	return (1);
 }
 
-t_room	*find_room(t_data *data, char *name)
+int		init_new_room(t_data *data, char **pars, t_coord *coord)
 {
-	t_room *cur;
-
-	cur = data->rooms;
-	while (cur)
-	{
-		if (ft_strcmp(cur->name, name) == 0)
-			return (cur);
-		cur = cur->next;
-	}
-	return (cur);
+	coord->x = ft_atoi(pars[1]);
+	coord->y = ft_atoi(pars[2]);
+	if (find_duplicate(data, pars[0], *coord) != NULL)
+		return (-12);
+	return (add_room(data, pars[0], *coord));
 }
 
-t_room	*find_by_type(t_data *data, int type)
+void	print_routes(t_data *data)
 {
-	t_room *cur;
+	t_route	*route;
+	t_room	*start;
+	int		i;
 
-	cur = data->rooms;
-	while (cur)
+	start = find_by_type(data, 0);
+	route = data->routes;
+	ft_printf("Found %d routes:\n", data->routes_count);
+	while (route != NULL)
 	{
-		if (cur->type == type)
-			return (cur);
-		cur = cur->next;
+		ft_printf("%s->", start->name);
+		i = 0;
+		while (i < route->depth - 1 && route->route[i + 1] != -1)
+		{
+			ft_printf("%s->", find_by_index(data, route->route[i])->name);
+			i++;
+		}
+		ft_printf("%s, depth: %d\n",
+			find_by_index(data, route->route[i])->name, route->depth);
+		route = route->next;
 	}
-	return (cur);
-}
-
-t_room	*find_by_index(t_data *data, int index)
-{
-	t_room *cur;
-
-	cur = data->rooms;
-	while (cur)
-	{
-		if (cur->index == index)
-			return (cur);
-		cur = cur->next;
-	}
-	return (cur);
 }
